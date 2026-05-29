@@ -13,13 +13,18 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        response.setContentType("text/html");
+
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
+        System.out.println("USERNAME: " + username);
+        System.out.println("PASSWORD: " + password);
+
         HttpSession session = request.getSession();
 
-        // 🔐 ADMIN LOGIN (ONLY THIS CAN ACCESS ADMIN PANEL)
-        if(username.equals("admin") && password.equals("admin123")) {
+        // 🔐 ADMIN LOGIN
+        if("admin".equals(username) && "admin123".equals(password)) {
             session.setAttribute("admin", username);
             response.sendRedirect("adminDashboard.jsp");
             return;
@@ -27,6 +32,7 @@ public class LoginServlet extends HttpServlet {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
+
             Connection con = DriverManager.getConnection(
                 "jdbc:mysql://localhost:3306/renteasy","root","123456");
 
@@ -39,14 +45,23 @@ public class LoginServlet extends HttpServlet {
             ResultSet rs = ps.executeQuery();
 
             if(rs.next()){
-                session.setAttribute("username", username);
-                response.sendRedirect("ownerDashboard.jsp");
+                System.out.println("LOGIN SUCCESS");
+
+                // ✅ SESSION FIX
+                session.setAttribute("user", username);
+
+                response.sendRedirect("dashboard.jsp");
+
             } else {
+                System.out.println("LOGIN FAILED");
                 response.sendRedirect("login.jsp?error=1");
             }
 
+            con.close();
+
         } catch(Exception e){
             e.printStackTrace();
+            response.getWriter().println("ERROR: " + e);
         }
     }
 }

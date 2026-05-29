@@ -1,114 +1,133 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Signup - RentEasy</title>
+<title>Signup - RentEasy</title>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <style>
-        body {
-            height: 100vh;
-        }
+<style>
+body{
+    margin:0;
+    height:100vh;
+    background:url("https://images.unsplash.com/photo-1600585154340-be6161a56a0c") no-repeat center/cover;
+    font-family:'Segoe UI';
+}
 
-        .left-side {
-            background: url('https://images.unsplash.com/photo-1586023492125-27b2c045efd7');
-            background-size: cover;
-            background-position: center;
-        }
+.overlay{
+    position:absolute;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.5);
+}
 
-        .form-box {
-            padding: 40px;
-        }
+.container-box{
+    position:relative;
+    z-index:2;
+    height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
 
-        .form-control {
-            border-radius: 10px;
-        }
-    </style>
+.form-box{
+    width:380px;
+    padding:30px;
+    border-radius:15px;
+    background:rgba(255,255,255,0.15);
+    backdrop-filter: blur(12px);
+    box-shadow:0 8px 25px rgba(0,0,0,0.4);
+    color:white;
+}
+
+.form-control{
+    background:rgba(255,255,255,0.2);
+    border:none;
+    color:white;
+}
+
+.form-control::placeholder{
+    color:#ddd;
+}
+
+.btn-main{
+    background:#28a745;
+    border:none;
+    width:100%;
+    padding:10px;
+    color:white;
+}
+
+.checkbox-label{
+    font-size:14px;
+    color:#ddd;
+}
+</style>
 </head>
 
 <body>
 
-<div class="container-fluid">
-    <div class="row vh-100">
+<div class="overlay"></div>
 
-        <!-- LEFT IMAGE -->
-        <div class="col-md-6 d-none d-md-block left-side"></div>
+<div class="container-box">
 
-        <!-- RIGHT FORM -->
-        <div class="col-md-6 d-flex align-items-center justify-content-center">
-            <div class="form-box w-75">
+<div class="form-box">
 
-                <h3 class="mb-3">Create Account</h3>
+<h2 class="text-center">Create Account</h2>
 
-                <form action="signup" method="post">
+<form action="signup" method="post" onsubmit="return validateForm()">
 
-                    <input type="text" name="name" class="form-control mb-2" placeholder="Full Name" required>
+<input type="text" name="name" class="form-control mb-2" placeholder="Full Name" required>
 
-                    <input type="text" name="username" class="form-control mb-2" placeholder="Username" required>
+<input type="text" name="username" class="form-control mb-2" placeholder="Username" required>
 
-                    <input type="email" name="email" class="form-control mb-2" placeholder="Email" required>
+<input type="email" name="email" class="form-control mb-2" placeholder="Email" required>
 
-                    <input type="text" name="phone" class="form-control mb-2" placeholder="Phone Number" required>
+<input type="text" name="phone" class="form-control mb-2" placeholder="Phone Number">
 
-                    <input type="password" name="password" class="form-control mb-3" placeholder="Password" required>
+<input type="password" name="password" class="form-control mb-3" placeholder="Password" required>
 
-                    <!-- AGREEMENT -->
-                    <div class="form-check mb-2">
-                        <input class="form-check-input" type="checkbox" required>
-                        <label class="form-check-label">
-                            I agree to the <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">terms & conditions</a>
-                        </label>
-                    </div>
-
-                    <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox">
-                        <label class="form-check-label">
-                            Get updates from RentEasy
-                        </label>
-                    </div>
-
-                    <button class="btn btn-success w-100">Signup</button>
-
-                </form>
-
-                <p class="mt-3 text-center">
-                    Already have account? <a href="login.jsp">Login</a>
-                </p>
-
-            </div>
-        </div>
-
-    </div>
+<!-- ✅ AGREEMENT CHECKBOX -->
+<div class="form-check mb-2">
+  <input class="form-check-input" type="checkbox" id="terms">
+  <label class="form-check-label checkbox-label">
+    I agree to the <a href="#" style="color:#36cfc9;">Terms & Conditions</a>
+  </label>
 </div>
 
-<!-- MODAL (Learn More) -->
-<div class="modal fade" id="termsModal">
-  <div class="modal-dialog">
-    <div class="modal-content">
-
-      <div class="modal-header">
-        <h5>Terms & Conditions</h5>
-        <button class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-
-      <div class="modal-body">
-        <ul>
-            <li>You must provide valid details</li>
-            <li>Products should be returned on time</li>
-            <li>Damage charges applicable</li>
-            <li>📍 Location must be ON while using RentEasy</li>
-        </ul>
-      </div>
-
-    </div>
-  </div>
+<div class="form-check mb-3">
+  <input class="form-check-input" type="checkbox">
+  <label class="form-check-label checkbox-label">
+    Get updates from RentEasy
+  </label>
 </div>
 
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<button class="btn-main">Signup</button>
+
+</form>
+
+<p class="mt-3 text-center">
+<a href="login.jsp" style="color:white;">Already have account?</a>
+</p>
+
+</div>
+</div>
+
+<!-- ✅ VALIDATION SCRIPT -->
+<script>
+function validateForm(){
+    let terms = document.getElementById("terms");
+
+    if(!terms.checked){
+        alert("Please accept Terms & Conditions ❌");
+        return false;
+    }
+
+    return true;
+}
+</script>
 
 </body>
 </html>

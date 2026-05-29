@@ -1,99 +1,113 @@
+<%@ include file="adminLayout.jsp" %>
 <%@ page import="java.sql.*" %>
-<%@ page session="true" %>
-<%
-if(session.getAttribute("admin") == null){
-    response.sendRedirect("login.jsp");
-    return;
-}
+<%@ page contentType="text/html;charset=UTF-8" %>
 
-int users=0, products=0;
+<!-- CHART LIBRARY -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<%
+int users = 0;
+int products = 0;
+int pending = 0;
+int approved = 0;
+int rejected = 0;
 
 try {
     Class.forName("com.mysql.cj.jdbc.Driver");
     Connection con = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/renteasy","root","123456");
 
+    // TOTAL USERS
     ResultSet rs = con.createStatement().executeQuery("SELECT COUNT(*) FROM users");
     if(rs.next()) users = rs.getInt(1);
 
+    // TOTAL PRODUCTS
     rs = con.createStatement().executeQuery("SELECT COUNT(*) FROM products");
     if(rs.next()) products = rs.getInt(1);
 
-} catch(Exception e){ e.printStackTrace(); }
+    // STATUS COUNT
+    rs = con.createStatement().executeQuery(
+        "SELECT status, COUNT(*) total FROM products GROUP BY status");
+
+    while(rs.next()){
+        String s = rs.getString("status");
+        int t = rs.getInt("total");
+
+        if("pending".equals(s)) pending = t;
+        if("approved".equals(s)) approved = t;
+        if("rejected".equals(s)) rejected = t;
+    }
+
+} catch(Exception e){
+    out.println(e);
+}
 %>
-
-<!DOCTYPE html>
-<html>
-<head>
-<title>Admin Panel</title>
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-<style>
-body { margin:0; background:#f5f7fa; font-family:Segoe UI; }
-
-.sidebar {
-    width:240px; height:100vh;
-    background:white; position:fixed;
-    padding:20px;
-}
-
-.sidebar a {
-    display:block; padding:12px;
-    border-radius:10px;
-    text-decoration:none;
-    color:#333;
-    transition:0.3s;
-}
-
-.sidebar a:hover { background:#e6f0ff; }
-
-.content { margin-left:260px; padding:30px; }
-
-.card-box {
-    padding:20px;
-    border-radius:15px;
-    background:white;
-    box-shadow:0 5px 15px rgba(0,0,0,0.1);
-    transition:0.3s;
-}
-.card-box:hover { transform:translateY(-5px); }
-</style>
-</head>
-
-<body>
-
-<div class="sidebar">
-    <h4>RentEasy Admin</h4>
-    <a href="adminDashboard.jsp">Dashboard</a>
-    <a href="adminUsers.jsp">Users</a>
-    <a href="adminProducts.jsp">Products</a>
-    <a href="logout">Logout</a>
-</div>
-
-<div class="content">
 
 <h2>Dashboard</h2>
 
+<!-- CARDS -->
 <div class="row mt-4">
 
-<div class="col-md-4">
-<div class="card-box">
-<h5>Total Users</h5>
-<h2><%= users %></h2>
-</div>
+    <div class="col-md-4">
+        <div class="card-box text-center">
+            <h5>Total Users</h5>
+            <h2><%= users %></h2>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card-box text-center">
+            <h5>Total Products</h5>
+            <h2><%= products %></h2>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card-box text-center">
+            <h5>Pending Products</h5>
+            <h2 style="color:orange;"><%= pending %></h2>
+        </div>
+    </div>
+
 </div>
 
-<div class="col-md-4">
-<div class="card-box">
-<h5>Total Products</h5>
-<h2><%= products %></h2>
-</div>
-</div>
+<!-- CHART SECTION -->
+<div class="row mt-5">
+
+    <div class="col-md-6">
+        <div class="card-box">
+            <h5>Product Status Analytics</h5>
+            <canvas id="myChart"></canvas>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card-box">
+            <h5>Quick Info</h5>
+
+            <p>✅ Approved: <b style="color:green;"><%= approved %></b></p>
+            <p>⏳ Pending: <b style="color:orange;"><%= pending %></b></p>
+            <p>❌ Rejected: <b style="color:red;"><%= rejected %></b></p>
+
+        </div>
+    </div>
 
 </div>
 
-</div>
+<!-- CHART SCRIPT -->
+<script>
+new Chart(document.getElementById('myChart'), {
+    type: 'pie',
+    data: {
+        labels: ['Pending', 'Approved', 'Rejected'],
+        datasets: [{
+            data: [<%=pending%>, <%=approved%>, <%=rejected%>],
+            backgroundColor: ['orange', 'green', 'red']
+        }]
+    }
+});
+</script>
 
+</div>
 </body>
 </html>
