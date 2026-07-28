@@ -1,67 +1,72 @@
 package com.renteasy.servlets;
 
 import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    @Override
+    protected void doPost(HttpServletRequest request,
+                          HttpServletResponse response)
             throws ServletException, IOException {
 
-        response.setContentType("text/html");
-
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-
-        System.out.println("USERNAME: " + username);
-        System.out.println("PASSWORD: " + password);
+        String email = request.getParameter("email");
 
         HttpSession session = request.getSession();
 
-        // 🔐 ADMIN LOGIN
-        if("admin".equals(username) && "admin123".equals(password)) {
-            session.setAttribute("admin", username);
-            response.sendRedirect("adminDashboard.jsp");
-            return;
-        }
-
         try {
+
             Class.forName("com.mysql.cj.jdbc.Driver");
 
             Connection con = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/renteasy","root","123456");
+                    "jdbc:mysql://localhost:3306/renteasy",
+                    "root",
+                    "123456");
 
             PreparedStatement ps = con.prepareStatement(
-                "SELECT * FROM users WHERE username=? AND password=?");
+                    "SELECT * FROM users WHERE email=?");
 
-            ps.setString(1, username);
-            ps.setString(2, password);
+            ps.setString(1, email);
 
             ResultSet rs = ps.executeQuery();
 
-            if(rs.next()){
-                System.out.println("LOGIN SUCCESS");
+            if (rs.next()) {
 
-                // ✅ SESSION FIX
-                session.setAttribute("user", username);
+            	session.setAttribute("userId", rs.getInt("id"));
+                session.setAttribute("user", email);
+                session.setAttribute("email", rs.getString("email"));
+                session.setAttribute("firstName", rs.getString("first_name"));
+                session.setAttribute("lastName", rs.getString("last_name"));
 
-                response.sendRedirect("dashboard.jsp");
+                response.sendRedirect("verifyLoginOtp.jsp");
 
             } else {
-                System.out.println("LOGIN FAILED");
-                response.sendRedirect("login.jsp?error=1");
+
+            	response.sendRedirect("index.jsp");
+
             }
 
+            rs.close();
+            ps.close();
             con.close();
 
-        } catch(Exception e){
+        } catch (Exception e) {
+
             e.printStackTrace();
-            response.getWriter().println("ERROR: " + e);
+            response.getWriter().println("ERROR : " + e.getMessage());
+
         }
+
     }
 }

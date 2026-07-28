@@ -2,8 +2,10 @@
 <%@ page import="java.sql.*" %>
 
 <%
-if(session.getAttribute("admin") == null){
-    response.sendRedirect("login.jsp");
+String role = (String) session.getAttribute("role");
+
+if(role == null || !role.equals("ADMIN")){
+    response.sendRedirect("index.jsp");
     return;
 }
 %>
@@ -47,13 +49,14 @@ img{
 
 <thead class="table-dark">
 <tr>
-    <th>ID</th>
-    <th>Name</th>
-    <th>Price</th>
-    <th>Owner</th>
-    <th>Image</th>
-    <th>Status</th>
-    <th>Action</th>
+   <th>ID</th>
+<th>Name</th>
+<th>Price/Day</th>
+<th>Deposit</th>
+<th>Owner</th>
+<th>Image</th>
+<th>Status</th>
+<th>Action</th>
 </tr>
 </thead>
 
@@ -80,10 +83,15 @@ try{
 
 <td><%= rs.getString("name") %></td>
 
-<td class="text-success fw-bold"><%= rs.getInt("price") %></td>
+<td class="text-success fw-bold">
+<%= rs.getInt("price") %>
+</td>
+
+<td class="text-primary fw-bold">
+<%= rs.getInt("deposit") %>
+</td>
 
 <td><%= rs.getString("owner") %></td>
-
 <td>
     <img src="<%=request.getContextPath()%>/<%= rs.getString("image") %>" 
          width="80" height="80">

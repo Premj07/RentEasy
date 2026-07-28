@@ -1,217 +1,800 @@
-<%@ page import="java.sql.*" %>
-<%@ page session="true" %>
-
-<%
-String id = request.getParameter("id");
-String username = (String) session.getAttribute("user");
-
-String name="", image="";
-int price=0;
-
-try{
-    Class.forName("com.mysql.cj.jdbc.Driver");
-
-    Connection con = DriverManager.getConnection(
-        "jdbc:mysql://localhost:3306/renteasy","root","123456");
-
-    PreparedStatement ps = con.prepareStatement(
-        "SELECT * FROM products WHERE id=?");
-
-    ps.setInt(1, Integer.parseInt(id));
-    ResultSet rs = ps.executeQuery();
-
-    if(rs.next()){
-        name = rs.getString("name");
-        price = rs.getInt("price");
-        image = rs.getString("image");
-    }
-}catch(Exception e){
-    out.println(e);
-}
-%>
+<%@page import="java.sql.*"%>
+<%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <!DOCTYPE html>
 <html>
-<head>
-<title>Payment - RentEasy</title>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<head>
+
+<meta charset="UTF-8">
+
+<title>RentEasy Checkout</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+<link rel="stylesheet" href="css/dashboard.css">
 
 <style>
+
 body{
-    background:#f4f6f9;
-    font-family:'Segoe UI';
+    background:#f4f6fb;
+    font-family:'Segoe UI',sans-serif;
+    padding-top:90px;
 }
 
-/* CARD */
-.card-box{
-    background:white;
-    border-radius:15px;
+.checkout-container{
+    max-width:1400px;
+}
+
+.checkout-card{
+    background:#fff;
+    border-radius:18px;
     padding:25px;
-    box-shadow:0 10px 25px rgba(0,0,0,0.1);
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+    margin-bottom:25px;
 }
 
-/* IMAGE */
-.product-img{
+.product-image{
     width:100%;
-    height:200px;
+    height:320px;
     object-fit:cover;
-    border-radius:10px;
-}
-
-/* BILL */
-.bill{
-    background:white;
     border-radius:15px;
-    padding:20px;
-    margin-top:30px;
+    border:1px solid #ddd;
 }
 
-/* LOGO */
-.logo{
-    font-size:22px;
+.product-title{
+    font-size:30px;
     font-weight:bold;
-    color:#20c997;
+    margin-top:20px;
 }
 
-/* TABLE */
-.table th{
-    background:#20c997;
-    color:white;
+.price{
+    font-size:28px;
+    font-weight:bold;
+    color:#0d6efd;
 }
+
+.section-title{
+    font-size:25px;
+    font-weight:700;
+    margin-bottom:20px;
+}
+
+.summary-row{
+    display:flex;
+    justify-content:space-between;
+    padding:12px 0;
+    border-bottom:1px solid #ececec;
+}
+
+.badge{
+    font-size:13px;
+    padding:8px 14px;
+}
+/* ========================================================= */
+/* PART 3 CSS */
+/* ========================================================= */
+
+.pickup-card{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+padding:18px;
+
+border:2px solid #ddd;
+
+border-radius:15px;
+
+cursor:pointer;
+
+margin-bottom:15px;
+
+transition:.3s;
+
+background:#fff;
+
+}
+
+.pickup-card:hover{
+
+border-color:#0d6efd;
+
+transform:translateY(-2px);
+
+}
+
+.pickup-card.active{
+
+border:2px solid #0d6efd;
+
+background:#eef5ff;
+
+}
+
+.pickup-icon{
+
+width:55px;
+
+height:55px;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+font-size:28px;
+
+background:#f3f6fb;
+
+border-radius:50%;
+
+}
+
 </style>
-
-<script>
-function calculateTotal(){
-    let price = <%= price %>;
-    let months = document.getElementById("months").value;
-
-    let days = months * 30;
-    let deposit = price * 10; // fixed deposit
-
-    let total = (price * days) + deposit;
-
-    document.getElementById("totalAmount").innerHTML = total;
-    document.getElementById("days").innerHTML = days;
-    document.getElementById("deposit").innerHTML = deposit;
-}
-
-function togglePayment(){
-    let method = document.getElementById("method").value;
-
-    document.getElementById("upiBox").style.display = "none";
-    document.getElementById("cardBox").style.display = "none";
-
-    if(method==="UPI"){
-        document.getElementById("upiBox").style.display = "block";
-    }else{
-        document.getElementById("cardBox").style.display = "block";
-    }
-}
-
-function printBill(){
-    window.print();
-}
-</script>
 
 </head>
 
-<body onload="calculateTotal()">
+<body>
+<!-- ========================================================= -->
+<!-- PART 2 JAVASCRIPT -->
+<!-- ========================================================= -->
 
-<div class="container mt-5">
+<script>
+
+/* ========================================================= */
+/* PART 4 START : LIVE CALCULATION */
+/* ========================================================= */
+
+function updateRentalDates(){
+
+    let months = parseInt(document.getElementById("months").value);
+
+    if(isNaN(months) || months < 1){
+        months = 1;
+        document.getElementById("months").value = 1;
+    }
+
+    let start = new Date();
+    let end = new Date(start);
+
+    end.setMonth(end.getMonth()+months);
+
+    document.getElementById("startDate").value =
+        start.toLocaleDateString("en-GB");
+
+    document.getElementById("endDate").value =
+        end.toLocaleDateString("en-GB");
+
+    calculatePayment();
+
+}
+
+function calculatePayment(){
+
+    let months = parseInt(document.getElementById("months").value);
+
+    if(isNaN(months) || months < 1)
+        months = 1;
+
+    let pricePerDay = parseFloat(document.getElementById("productPrice").value);
+
+    let deposit = parseFloat(document.getElementById("productDeposit").value);
+
+    let rent = pricePerDay * (months * 30);
+
+    let delivery = 0;
+
+    let grandTotal = rent + deposit + delivery;
+
+    document.getElementById("rentAmount").value = rent;
+    document.getElementById("deliveryCharge").value = delivery;
+    document.getElementById("grandTotal").value = grandTotal;
+
+    if(document.getElementById("rentValue"))
+        document.getElementById("rentValue").innerHTML="₹"+rent;
+
+    if(document.getElementById("depositValue"))
+        document.getElementById("depositValue").innerHTML="₹"+deposit;
+
+    if(document.getElementById("deliveryValue"))
+        document.getElementById("deliveryValue").innerHTML="₹"+delivery;
+
+    if(document.getElementById("grandValue"))
+        document.getElementById("grandValue").innerHTML="₹"+grandTotal;
+
+}
+
+window.onload=function(){
+
+    updateRentalDates();
+
+};
+
+/* ========================================================= */
+/* PART 4 END */
+/* ========================================================= */
+/* ========================================================= */
+/* PART 3 JAVASCRIPT */
+/* ========================================================= */
+
+function selectPickup(type, element) {
+
+    document.getElementById("pickupMethod").value = type;
+
+    document.querySelectorAll(".pickup-card").forEach(function(card) {
+        card.classList.remove("active");
+    });
+
+    element.classList.add("active");
+
+    // We'll enable payment calculation in Part 5
+    // calculatePayment();
+
+}
+<!-- ========================================================= -->
+<!-- RAZORPAY PAYMENT -->
+<!-- ========================================================= -->
+
+async function startPayment() {
+
+    let amount =
+        document.getElementById("grandValue").innerText
+                .replace("₹","")
+                .replace(",","")
+                .trim();
+
+    try {
+
+        const response =
+        await fetch("CreateOrderServlet", {
+
+            method: "POST",
+
+            headers: {
+
+                "Content-Type":
+                "application/x-www-form-urlencoded"
+
+            },
+
+            body:
+            	"amount=" + encodeURIComponent(amount)
+            	+ "&productId=" + encodeURIComponent(document.getElementById("productId").value)
+            	+ "&ownerId=" + encodeURIComponent(document.getElementById("ownerId").value)
+                + "&rentAmount=" + encodeURIComponent(document.getElementById("rentAmount").value)
+                + "&depositAmount=" + encodeURIComponent(document.getElementById("productDeposit").value)
+                + "&pickupMethod=" + encodeURIComponent(document.getElementById("pickupMethod").value)
+                + "&rentalMonths=" + encodeURIComponent(document.getElementById("months").value)
+
+        });
+
+        const order =
+        await response.json();
+
+        openRazorpay(order);
+
+    }
+
+    catch(error){
+
+        alert("Unable to create payment.");
+
+        console.error(error);
+
+    }
+
+}
+
+function openRazorpay(order){
+
+    var options = {
+
+        key:
+        "rzp_test_THRfTDCoXenpH0",
+
+        amount:
+        order.amount,
+
+        currency:
+        order.currency,
+
+        name:
+        "RentEasy",
+
+        description:
+        "Rental Payment",
+
+        order_id:
+        order.id,
+
+        handler:function(response){
+
+            window.location =
+            "VerifyPaymentServlet"
+            + "?payment_id="
+            + response.razorpay_payment_id
+            + "&order_id="
+            + response.razorpay_order_id
+            + "&signature="
+            + response.razorpay_signature;
+
+        },
+
+        theme:{
+            color:"#0d6efd"
+        }
+
+    };
+
+    var rzp =
+    new Razorpay(options);
+
+    rzp.open();
+
+}
+</script>
+
+<%
+
+Connection con=null;
+PreparedStatement ps=null;
+ResultSet rs=null;
+
+String id=request.getParameter("id");
+
+String name="";
+String category="";
+String description="";
+String image="";
+String owner="";
+int ownerId = 0;
+double price=0;
+double deposit=0;
+
+try{
+
+Class.forName("com.mysql.cj.jdbc.Driver");
+
+con=DriverManager.getConnection(
+"jdbc:mysql://localhost:3306/renteasy",
+"root",
+"123456"
+);
+
+ps=con.prepareStatement(
+"SELECT * FROM products WHERE id=?"
+);
+
+ps.setInt(1,Integer.parseInt(id));
+
+rs=ps.executeQuery();
+
+if(rs.next()){
+
+name=rs.getString("name");
+category=rs.getString("category");
+description=rs.getString("description");
+owner=rs.getString("owner");
+image=rs.getString("image");
+price=rs.getDouble("price");
+deposit=rs.getDouble("deposit");
+ownerId = rs.getInt("owner_id");
+
+}else{
+
+out.println("<h2 style='color:red;text-align:center;'>Product Not Found</h2>");
+
+return;
+
+}
+
+}catch(Exception e){
+
+out.println("<pre>");
+e.printStackTrace(new java.io.PrintWriter(out));
+out.println("</pre>");
+
+}
+%>
+<jsp:include page="includes/navbar.jsp"/>
+<div class="container checkout-container mt-4">
 
 <div class="row">
 
-<!-- PRODUCT -->
-<div class="col-md-6">
-    <div class="card-box">
+<!-- ================= PRODUCT CARD ================= -->
 
-        <img src="<%=request.getContextPath()%>/<%= image %>" class="product-img">
+<div class="col-lg-4">
 
-        <h4 class="mt-3"><%= name %></h4>
-        <h5 class="text-success"><%= price %> / day</h5>
+<div class="checkout-card">
 
-        <label class="mt-3">Select Months (Min 3)</label>
-        <input type="number" id="months" value="3" min="3"
-               class="form-control" onchange="calculateTotal()">
+<img
+src="<%=request.getContextPath()%>/<%=image%>"
+class="product-image">
 
-    </div>
-</div>
+<h2 class="product-title">
 
-<!-- PAYMENT -->
-<div class="col-md-6">
-    <div class="card-box">
+<%=name%>
 
-        <h4>Payment Details</h4>
+</h2>
 
-        <label>Payment Method</label>
-        <select id="method" class="form-control mb-3" onchange="togglePayment()">
-            <option>UPI</option>
-            <option>Card</option>
-        </select>
+<div class="mb-3">
 
-        <!-- UPI -->
-        <div id="upiBox">
-            <input type="text" class="form-control mb-3"
-                   placeholder="Enter UPI ID (example@upi)">
-        </div>
+<span class="badge bg-success">
 
-        <!-- CARD -->
-        <div id="cardBox" style="display:none;">
-            <input type="text" class="form-control mb-2" placeholder="Card Number">
-            <input type="text" class="form-control mb-2" placeholder="Name on Card">
-            <input type="text" class="form-control mb-2" placeholder="Expiry (MM/YY)">
-            <input type="password" class="form-control mb-3" placeholder="CVV">
-        </div>
+Verified
 
-        <button class="btn btn-success w-100">
-            Pay <span id="totalAmount"></span>
-        </button>
+</span>
 
-    </div>
-</div>
+<span class="badge bg-primary">
+
+Available
+
+</span>
 
 </div>
 
-<!-- BILL -->
-<div class="bill">
+<div class="summary-row">
 
-    <div class="d-flex justify-content-between">
-        <div class="logo">RentEasy</div>
-        <div>Date: <%= new java.util.Date() %></div>
-    </div>
+<span>Category</span>
 
-    <hr>
+<strong>
 
-    <p><b>User:</b> <%= username %></p>
+<%=category%>
 
-    <table class="table table-bordered mt-3">
+</strong>
 
-        <tr>
-            <th>Product</th>
-            <th>Price/Day</th>
-            <th>Days</th>
-            <th>Deposit</th>
-            <th>Total</th>
-        </tr>
+</div>
 
-        <tr>
-            <td><%= name %></td>
-            <td><%= price %></td>
-            <td id="days"></td>
-            <td id="deposit"></td>
-            <td><span id="totalAmount"></span></td>
-        </tr>
+<div class="summary-row">
 
-    </table>
+<span>Owner</span>
 
-    <button onclick="printBill()" class="btn btn-dark">
-        Print Bill 
-    </button>
+<strong>
+
+<%=owner%>
+
+</strong>
+
+</div>
+
+<div class="summary-row">
+
+<span>Rent Price</span>
+
+<strong class="price">
+
+₹<%=price%>/Day
+
+</strong>
+
+</div>
+
+<div class="summary-row">
+
+<span>Security Deposit</span>
+
+<strong>
+
+₹<%=deposit%>
+
+</strong>
+
+</div>
+
+<div class="mt-4">
+
+<h6>Description</h6>
+
+<p>
+
+<%=description%>
+
+</p>
 
 </div>
 
 </div>
 
+</div>
+
+<!-- ================= RENTAL DETAILS ================= -->
+
+<!-- ========================================================= -->
+<!-- PART 2 START : RENTAL DETAILS -->
+<!-- ========================================================= -->
+
+<div class="col-lg-4">
+
+<div class="checkout-card">
+
+<h3 class="section-title">
+
+Rental Details
+
+</h3>
+
+<form id="rentalForm">
+
+<!-- Hidden fields for future use -->
+
+<input type="hidden" id="rentAmount" name="rentAmount">
+<input type="hidden" id="deliveryCharge" name="deliveryCharge">
+<input type="hidden" id="grandTotal" name="grandTotal">
+<input type="hidden" id="productPrice" value="<%=price%>">
+<input type="hidden" id="productDeposit" value="<%=deposit%>">
+<input type="hidden" id="totalDays" name="days">
+<input type="hidden" id="productId" value="<%=id%>">
+<input type="hidden" id="ownerId" value="<%=ownerId%>">
+<input type="hidden" id="pickupMethod" name="pickupMethod">
+<input type="hidden" id="rentalMonths" name="rentalMonths">
+
+<!-- Rental Months -->
+
+<!-- Rental Duration -->
+
+<div class="mb-4">
+
+<label class="form-label fw-bold">
+
+Rental Duration (Months)
+
+</label>
+
+<input
+type="number"
+id="months"
+class="form-control"
+min="1"
+max="24"
+value="1"
+placeholder="Enter number of months"
+oninput="updateRentalDates()">
+
+<small class="text-muted">
+Enter how many months you want to rent this product.
+</small>
+
+</div>
+
+<!-- Start Date -->
+
+<div class="mb-4">
+
+<label class="form-label fw-bold">
+
+Rental Starts
+
+</label>
+
+<input
+type="text"
+id="startDate"
+class="form-control"
+readonly>
+
+</div>
+
+<!-- End Date -->
+
+<div class="mb-4">
+
+<label class="form-label fw-bold">
+
+Rental Ends
+
+</label>
+
+<input
+type="text"
+id="endDate"
+class="form-control"
+readonly>
+
+</div>
+<!-- ========================================================= -->
+<!-- PART 3 START : PICKUP METHOD -->
+<!-- ========================================================= -->
+
+<h5 class="fw-bold mt-4 mb-3">
+
+Pickup Method
+
+</h5>
+
+<input
+type="hidden"
+id="pickupMethod"
+name="pickupMethod"
+value="SELF">
+
+<div
+class="pickup-card active"
+onclick="selectPickup('SELF',this)">
+
+<div class="d-flex align-items-center">
+
+<div class="pickup-icon">
+
+🚶
+
+</div>
+
+<div class="ms-3">
+
+<h6 class="mb-1">
+
+Self Pickup
+
+</h6>
+
+<small class="text-muted">
+
+Collect product from owner
+
+</small>
+
+</div>
+
+</div>
+
+<span class="badge bg-success">
+
+FREE
+
+</span>
+
+</div>
+
+
+<!-- ========================================================= -->
+<!-- PART 3 END -->
+<!-- ========================================================= -->
+</form>
+
+</div>
+
+</div>
+
+<!-- ========================================================= -->
+<!-- PART 2 END -->
+<!-- ========================================================= -->
+
+<!-- ================= PAYMENT SUMMARY ================= -->
+
+<!-- ========================================================= -->
+<!-- PART 5 START : PAYMENT SUMMARY -->
+<!-- ========================================================= -->
+
+<div class="col-lg-4">
+
+<div class="checkout-card sticky-top" style="top:100px;">
+
+<h3 class="section-title">
+
+Payment Summary
+
+</h3>
+
+<div class="summary-row">
+
+<span>Rent Amount</span>
+
+<strong id="rentValue">
+
+₹0
+
+</strong>
+
+</div>
+
+<div class="summary-row">
+
+<span>Security Deposit</span>
+
+<strong id="depositValue">
+
+₹<%=deposit%>
+
+</strong>
+
+</div>
+
+<div class="summary-row">
+
+<span>Delivery Charge</span>
+
+<strong id="deliveryValue">
+
+₹0
+
+</strong>
+
+</div>
+
+<div class="summary-row">
+
+<span>
+
+GST
+
+</span>
+
+<strong>
+
+₹0
+
+</strong>
+
+</div>
+
+<hr>
+
+<div class="d-flex justify-content-between align-items-center">
+
+<h4>
+
+Grand Total
+
+</h4>
+
+<h3
+id="grandValue"
+class="text-primary">
+
+₹0
+
+</h3>
+
+</div>
+
+<div class="mt-4">
+
+<button
+    type="button"
+    class="btn btn-primary w-100"
+    onclick="startPayment()">
+
+    Proceed To Payment
+
+</button>
+
+</div>
+
+<div class="mt-3 text-center">
+
+<small class="text-success">
+
+<i class="fa-solid fa-shield-halved"></i>
+
+100% Secure Checkout
+
+</small>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ========================================================= -->
+<!-- PART 5 END -->
+<!-- ========================================================= -->		
+
+</div>
+
+</div>
+<!-- ========================================================= -->
+<!-- RAZORPAY CHECKOUT -->
+<!-- ========================================================= -->
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </body>
+
 </html>

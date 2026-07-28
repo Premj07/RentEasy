@@ -3,13 +3,13 @@
 
 <%
 if(session.getAttribute("user")==null){
-    response.sendRedirect("login.jsp");
+    response.sendRedirect("index.jsp");
     return;
 }
 
 String username = (String) session.getAttribute("user");
+String email = (String) session.getAttribute("email");
 
-String email = "";
 String status = "Not Submitted";
 String photo = null;
 
@@ -19,20 +19,12 @@ try{
     Connection con = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/renteasy","root","123456");
 
-    // USER EMAIL
-    PreparedStatement ps1 = con.prepareStatement(
-        "SELECT email FROM users WHERE username=?");
-    ps1.setString(1, username);
-    ResultSet rs1 = ps1.executeQuery();
-
-    if(rs1.next()){
-        email = rs1.getString("email");
-    }
 
     // KYC DETAILS
-    PreparedStatement ps2 = con.prepareStatement(
-        "SELECT status, photo FROM kyc WHERE username=?");
-    ps2.setString(1, username);
+PreparedStatement ps2 = con.prepareStatement(
+    "SELECT status, photo FROM kyc WHERE email=?");
+
+ps2.setString(1, email);
     ResultSet rs2 = ps2.executeQuery();
 
     if(rs2.next()){
@@ -46,7 +38,7 @@ try{
     out.println(e);
 }
 %>
-
+<jsp:include page="includes/authCheck.jsp"/>
 <!DOCTYPE html>
 <html>
 <head>
@@ -101,7 +93,6 @@ body{
         <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" 
              class="profile-img mb-3">
     <% } %>
-
     <!-- DETAILS -->
     <p><b>Username:</b> <%= username %></p>
     <p><b>Email:</b> <%= email %></p>

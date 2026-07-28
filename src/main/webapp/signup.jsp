@@ -79,37 +79,99 @@ body{
 
 <form action="signup" method="post" onsubmit="return validateForm()">
 
-<input type="text" name="name" class="form-control mb-2" placeholder="Full Name" required>
+<div class="row">
 
-<input type="text" name="username" class="form-control mb-2" placeholder="Username" required>
-
-<input type="email" name="email" class="form-control mb-2" placeholder="Email" required>
-
-<input type="text" name="phone" class="form-control mb-2" placeholder="Phone Number">
-
-<input type="password" name="password" class="form-control mb-3" placeholder="Password" required>
-
-<!-- ✅ AGREEMENT CHECKBOX -->
-<div class="form-check mb-2">
-  <input class="form-check-input" type="checkbox" id="terms">
-  <label class="form-check-label checkbox-label">
-    I agree to the <a href="#" style="color:#36cfc9;">Terms & Conditions</a>
-  </label>
+<div class="col-6">
+<input
+type="text"
+name="firstName"
+class="form-control mb-3"
+placeholder="First Name"
+required>
 </div>
 
-<div class="form-check mb-3">
-  <input class="form-check-input" type="checkbox">
-  <label class="form-check-label checkbox-label">
-    Get updates from RentEasy
-  </label>
+<div class="col-6">
+<input
+type="text"
+name="lastName"
+class="form-control mb-3"
+placeholder="Last Name"
+required>
 </div>
 
-<button class="btn-main">Signup</button>
+</div>
 
+<label class="mb-2">MIT-ADT Email</label>
+
+<div class="input-group mb-3">
+
+<input
+type="email"
+id="email"
+name="email"
+class="form-control"
+placeholder="Enter Email"
+required>
+
+<button
+class="btn btn-primary"
+type="button"
+onclick="sendOTP()">
+
+Send OTP
+
+</button>
+
+</div>
+
+<input
+type="text"
+name="otp"
+class="form-control mb-3"
+placeholder="Enter Email OTP"
+required>
+
+<small
+id="otpMessage"
+style="color:green;font-weight:bold;"></small>
+
+<input
+type="text"
+name="phone"
+class="form-control mb-3"
+placeholder="Mobile Number"
+required>
+
+<div class="form-check mb-4">
+
+<input
+class="form-check-input"
+type="checkbox"
+id="terms">
+
+<label class="form-check-label">
+
+I agree to
+<a href="#">
+Terms & Conditions
+</a>
+
+</label>
+
+</div>
+
+<h2 class="text-center mb-2">
+Welcome to RentEasy
+</h2>
+
+<p class="text-center mb-4">
+Create your account in less than a minute.
+</p>
+	
 </form>
 
 <p class="mt-3 text-center">
-<a href="login.jsp" style="color:white;">Already have account?</a>
+<a href="index.jsp" style="color:white;">Already have account?</a>
 </p>
 
 </div>
@@ -128,6 +190,39 @@ function validateForm(){
     return true;
 }
 </script>
+<script>
 
+
+</script>
+<script>
+
+function sendOTP(){
+
+    let email =
+    document.getElementById("email").value;
+
+    if(email==""){
+
+        alert("Enter Email First");
+        return;
+
+    }
+
+    fetch(
+    "sendOtp?email="
+    + encodeURIComponent(email))
+
+    .then(response=>response.text())
+
+    .then(data=>{
+
+        document.getElementById(
+        "otpMessage").innerHTML=data;
+
+    });
+
+}
+
+</script>
 </body>
 </html>
