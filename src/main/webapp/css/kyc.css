@@ -1,0 +1,86 @@
+body{
+    background:#f4f7fc;
+}
+
+.main-content{
+    padding:35px;
+}
+
+.kyc-card{
+
+    max-width:950px;
+
+    margin:auto;
+
+    background:white;
+
+    border-radius:20px;
+
+    padding:40px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+}
+
+.card-header{
+
+    margin-bottom:35px;
+
+}
+
+.card-header h2{
+
+    font-size:34px;
+
+    color:#2563EB;
+
+    font-weight:700;
+
+}
+
+.card-header p{
+
+    color:#64748B;
+
+    margin-top:8px;
+
+    font-size:16px;
+
+}
+/* ================= FORM ================= */
+
+.form-label{
+
+    font-weight:600;
+
+    color:#1e293b;
+
+    margin-bottom:8px;
+
+}
+
+.form-control{
+
+    height:52px;
+
+    border-radius:12px;
+
+    border:1px solid #dbe3ef;
+
+    font-size:15px;
+
+}
+
+.form-control:focus{
+
+    border-color:#2563EB;
+
+    box-shadow:0 0 0 .2rem rgba(37,99,235,.15);
+
+}
+
+.row{
+
+    margin-bottom:25px;
+
+}

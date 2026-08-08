@@ -1,0 +1,2012 @@
+/* =========================================================
+   RENTEASY - OWNER DASHBOARD
+   Complete Owner Dashboard UI
+========================================================= */
+
+
+/* =========================================================
+   1. GLOBAL
+========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #f5f7fb;
+    color: #0f172a;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+/* =========================================================
+   2. MAIN CONTENT
+========================================================= */
+
+.main-content {
+    margin-left: 270px;
+    margin-top: 72px;
+    padding: 28px 30px 50px;
+    min-height: calc(100vh - 72px);
+    background: #f5f7fb;
+}
+
+.main-content .container {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+}
+
+
+/* =========================================================
+   3. OWNER SIDEBAR
+========================================================= */
+
+.sidebar {
+    position: fixed;
+    top: 72px;
+    left: 0;
+
+    width: 270px;
+    height: calc(100vh - 72px);
+
+    background: #ffffff;
+    border-right: 1px solid #e2e8f0;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    z-index: 999;
+
+    display: flex !important;
+    flex-direction: column;
+}
+
+
+/* Scrollbar */
+
+.sidebar::-webkit-scrollbar {
+    width: 5px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+
+/* =========================================================
+   4. OWNER PROFILE
+========================================================= */
+
+.owner-profile {
+    padding: 20px 20px 17px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.owner-profile-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.owner-avatar {
+    width: 44px;
+    height: 44px;
+
+    background: #2563eb;
+    color: #ffffff;
+
+    border-radius: 12px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 17px;
+    font-weight: 700;
+
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.18);
+}
+
+.owner-profile-name {
+    margin: 0 0 3px;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    color: #0f172a;
+}
+
+.owner-profile-role {
+    margin: 0;
+
+    font-size: 11px;
+    color: #64748b;
+}
+
+.verified-owner {
+    margin-top: 10px;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+
+    padding: 4px 8px;
+
+    background: #eff6ff;
+    color: #2563eb;
+
+    border-radius: 20px;
+
+    font-size: 10px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   5. SIDEBAR MENU
+========================================================= */
+
+.sidebar-menu {
+    list-style: none;
+
+    margin: 0;
+    padding: 12px 10px 20px;
+
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.sidebar-menu li {
+    display: block !important;
+    margin: 3px 0;
+}
+
+
+/* Section labels */
+
+.sidebar-section-title {
+    padding: 14px 12px 6px;
+
+    color: #94a3b8;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+
+/* Links */
+
+.sidebar-menu li a {
+    width: 100%;
+
+    display: flex !important;
+    align-items: center;
+
+    gap: 11px;
+
+    padding: 11px 12px;
+
+    color: #475569 !important;
+
+    text-decoration: none;
+
+    border-radius: 9px;
+
+    font-size: 13px;
+    font-weight: 500;
+
+    transition: all 0.2s ease;
+}
+
+
+/* Icons */
+
+.sidebar-menu li a i {
+    width: 30px;
+    height: 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #f8fafc;
+
+    border-radius: 8px;
+
+    color: #64748b;
+
+    font-size: 15px;
+
+    transition: 0.2s ease;
+}
+
+
+/* Hover */
+
+.sidebar-menu li a:hover {
+    background: #eff6ff;
+    color: #2563eb !important;
+}
+
+.sidebar-menu li a:hover i {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+
+/* Active */
+
+.sidebar-menu li.active a {
+    background: #2563eb;
+    color: #ffffff !important;
+
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.20);
+}
+
+.sidebar-menu li.active a i {
+    background: rgba(255, 255, 255, 0.16);
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   6. SIDEBAR BOTTOM
+========================================================= */
+
+.sidebar-bottom {
+    margin-top: auto;
+
+    padding: 12px;
+
+    border-top: 1px solid #e2e8f0;
+
+    background: #ffffff;
+}
+
+.switch-user-btn,
+.logout-btn {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 11px 12px;
+
+    border-radius: 9px;
+
+    text-decoration: none;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.switch-user-btn {
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+.switch-user-btn:hover {
+    background: #dbeafe;
+}
+
+.logout-btn {
+    margin-top: 5px;
+
+    color: #dc2626;
+    background: transparent;
+}
+
+.logout-btn:hover {
+    background: #fef2f2;
+}
+
+
+/* =========================================================
+   7. OWNER HERO
+========================================================= */
+
+.owner-hero {
+    width: 100%;
+    min-height: 215px;
+
+    background: linear-gradient(
+        135deg,
+        #2563eb 0%,
+        #3b82f6 100%
+    );
+
+    border-radius: 16px;
+
+    padding: 30px 34px;
+
+    margin-bottom: 24px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 30px;
+
+    overflow: hidden;
+
+    box-shadow: 0 8px 22px rgba(37, 99, 235, 0.12);
+}
+
+
+/* =========================================================
+   8. HERO LEFT
+========================================================= */
+
+.owner-hero-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.owner-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 6px 11px;
+
+    background: rgba(255, 255, 255, 0.17);
+
+    color: #ffffff;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    margin-bottom: 14px;
+}
+
+.owner-welcome-title {
+    margin: 0;
+
+    color: #ffffff;
+
+    font-size: 28px;
+    line-height: 1.25;
+
+    font-weight: 700;
+
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.owner-welcome-text {
+    max-width: 580px;
+
+    margin: 10px 0 20px;
+
+    color: rgba(255, 255, 255, 0.9);
+
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   9. HERO BUTTONS
+========================================================= */
+
+.owner-hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+}
+
+.owner-action-primary,
+.owner-action-secondary {
+    min-height: 40px;
+
+    padding: 0 17px;
+
+    border-radius: 8px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    text-decoration: none;
+
+    transition: all 0.2s ease;
+}
+
+.owner-action-primary {
+    background: #ffffff;
+    color: #2563eb;
+
+    border: 1px solid #ffffff;
+}
+
+.owner-action-primary:hover {
+    background: #f8fafc;
+    color: #1d4ed8;
+
+    transform: translateY(-1px);
+}
+
+.owner-action-secondary {
+    background: transparent;
+    color: #ffffff;
+
+    border: 1px solid rgba(255, 255, 255, 0.75);
+}
+
+.owner-action-secondary:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   10. HERO SUMMARY
+========================================================= */
+
+.owner-hero-summary {
+    display: flex;
+    align-items: stretch;
+
+    gap: 12px;
+
+    flex-shrink: 0;
+}
+
+.owner-summary-card {
+    width: 145px;
+    min-height: 120px;
+
+    background: #ffffff;
+
+    border-radius: 12px;
+
+    padding: 16px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    box-shadow: 0 5px 15px rgba(15, 23, 42, 0.08);
+}
+
+.owner-summary-icon {
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #eff6ff;
+    color: #2563eb;
+
+    border-radius: 9px;
+
+    font-size: 16px;
+}
+
+.owner-summary-card h3 {
+    margin: 9px 0 3px;
+
+    color: #0f172a;
+
+    font-size: 25px;
+    font-weight: 700;
+}
+
+.owner-summary-card span {
+    color: #64748b;
+
+    font-size: 11px;
+    font-weight: 500;
+}
+
+
+/* =========================================================
+   11. STATISTICS
+========================================================= */
+
+.stats-grid {
+    display: grid;
+
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+
+    gap: 16px;
+
+    margin: 0 0 28px;
+}
+
+.stat-card {
+    position: relative;
+
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+
+    padding: 20px;
+
+    min-height: 135px;
+
+    text-align: left;
+
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+
+    transition: all 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+}
+
+.stat-card i {
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    border-radius: 10px;
+
+    font-size: 19px;
+}
+
+.stat-card h2 {
+    margin: 13px 0 4px;
+
+    color: #0f172a;
+
+    font-size: 25px;
+    font-weight: 700;
+}
+
+.stat-card p {
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 12px;
+    font-weight: 500;
+}
+
+
+/* =========================================================
+   12. SECTION HEADER
+========================================================= */
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 15px;
+
+    margin: 28px 0 16px;
+}
+
+.section-header h2,
+.section-header h3 {
+    margin: 0;
+
+    color: #0f172a;
+
+    font-size: 19px;
+    font-weight: 700;
+}
+
+.section-header p {
+    margin: 5px 0 0;
+
+    color: #64748b;
+
+    font-size: 12px;
+}
+
+.btn-add-product {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 6px;
+
+    padding: 10px 15px;
+
+    background: #2563eb;
+    color: #ffffff;
+
+    border-radius: 8px;
+
+    text-decoration: none;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    transition: 0.2s ease;
+}
+
+.btn-add-product:hover {
+    background: #1d4ed8;
+    color: #ffffff;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   13. OWNER PRODUCT GRID
+========================================================= */
+
+.owner-product-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fill, minmax(230px, 1fr));
+
+    gap: 18px;
+
+    margin-bottom: 30px;
+}
+
+
+/* =========================================================
+   14. PRODUCT CARD
+========================================================= */
+
+.owner-product-card {
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 14px;
+
+    overflow: hidden;
+
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+
+    transition: all 0.2s ease;
+}
+
+.owner-product-card:hover {
+    transform: translateY(-3px);
+
+    box-shadow: 0 10px 22px rgba(15, 23, 42, 0.09);
+}
+
+
+/* =========================================================
+   15. PRODUCT IMAGE
+========================================================= */
+
+.product-image {
+    position: relative;
+
+    width: 100%;
+    height: 185px;
+
+    background: #f8fafc;
+
+    overflow: hidden;
+}
+
+.product-image img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    display: block;
+
+    transition: transform 0.3s ease;
+}
+
+.owner-product-card:hover .product-image img {
+    transform: scale(1.025);
+}
+
+
+/* =========================================================
+   16. PRODUCT STATUS
+========================================================= */
+
+.status {
+    position: absolute;
+
+    top: 10px;
+    right: 10px;
+
+    padding: 5px 9px;
+
+    background: #2563eb;
+    color: #ffffff;
+
+    border-radius: 20px;
+
+    font-size: 10px;
+    font-weight: 600;
+
+    text-transform: capitalize;
+
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.10);
+}
+
+.status.available,
+.status.approved {
+    background: #16a34a;
+}
+
+.status.pending {
+    background: #f59e0b;
+}
+
+.status.rented {
+    background: #7c3aed;
+}
+
+.status.rejected {
+    background: #dc2626;
+}
+
+
+/* =========================================================
+   17. PRODUCT DETAILS
+========================================================= */
+
+.product-details {
+    padding: 15px;
+}
+
+.product-details h4 {
+    margin: 0 0 8px;
+
+    color: #0f172a;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.product-details p {
+    margin: 5px 0;
+
+    color: #64748b;
+
+    font-size: 11px;
+    line-height: 1.45;
+}
+
+.product-details p i {
+    margin-right: 4px;
+
+    color: #64748b;
+}
+
+.product-price {
+    margin-top: 9px !important;
+
+    color: #0f172a !important;
+
+    font-size: 14px !important;
+    font-weight: 700 !important;
+}
+
+
+/* =========================================================
+   18. PRODUCT ACTIONS
+========================================================= */
+
+.owner-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 8px;
+
+    margin-top: 14px;
+
+    padding-top: 12px;
+
+    border-top: 1px solid #f1f5f9;
+}
+
+.btn-edit,
+.btn-delete,
+.btn-view {
+    width: 36px;
+    height: 36px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+
+    border-radius: 8px;
+
+    text-decoration: none;
+
+    font-size: 14px;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+.btn-edit {
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+.btn-edit:hover {
+    background: #2563eb;
+    color: #ffffff;
+}
+
+.btn-delete {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+.btn-delete:hover {
+    background: #dc2626;
+    color: #ffffff;
+}
+
+.btn-view {
+    background: #ecfdf5;
+    color: #059669;
+}
+
+.btn-view:hover {
+    background: #059669;
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   19. BOOKING SECTION
+========================================================= */
+
+.owner-bookings {
+    margin-top: 30px;
+}
+
+.booking-card {
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 14px;
+
+    padding: 18px;
+
+    margin-bottom: 14px;
+
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+}
+
+.booking-card:hover {
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.07);
+}
+
+.booking-card h4 {
+    margin: 0 0 8px;
+
+    color: #0f172a;
+
+    font-size: 14px;
+}
+
+.booking-card p {
+    margin: 5px 0;
+
+    color: #64748b;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   20. EMPTY STATE
+========================================================= */
+
+.empty-state {
+    width: 100%;
+
+    background: #ffffff;
+
+    border: 1px dashed #cbd5e1;
+
+    border-radius: 14px;
+
+    padding: 45px 20px;
+
+    text-align: center;
+}
+
+.empty-state i {
+    display: block;
+
+    margin-bottom: 12px;
+
+    color: #94a3b8;
+
+    font-size: 35px;
+}
+
+.empty-state h3 {
+    margin: 0 0 7px;
+
+    color: #0f172a;
+
+    font-size: 16px;
+}
+
+.empty-state p {
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   21. GENERAL CARDS
+========================================================= */
+
+.owner-card {
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 14px;
+
+    padding: 20px;
+
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+}
+
+
+/* =========================================================
+   22. TABLES
+========================================================= */
+
+.owner-table-wrapper {
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 14px;
+
+    overflow: hidden;
+
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+}
+
+.owner-table {
+    width: 100%;
+
+    border-collapse: collapse;
+}
+
+.owner-table th {
+    padding: 13px 15px;
+
+    background: #f8fafc;
+
+    color: #475569;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    text-align: left;
+
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.owner-table td {
+    padding: 14px 15px;
+
+    color: #334155;
+
+    font-size: 12px;
+
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.owner-table tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* =========================================================
+   23. RESPONSIVE - TABLET
+========================================================= */
+
+@media (max-width: 1200px) {
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .owner-hero {
+        align-items: flex-start;
+    }
+
+    .owner-hero-summary {
+        flex-direction: column;
+    }
+
+    .owner-summary-card {
+        width: 150px;
+    }
+}
+
+
+/* =========================================================
+   24. RESPONSIVE - SMALL TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .main-content {
+        margin-left: 0;
+
+        padding: 22px;
+    }
+
+    .owner-hero {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .owner-hero-summary {
+        width: 100%;
+
+        flex-direction: row;
+    }
+
+    .owner-summary-card {
+        flex: 1;
+        width: auto;
+    }
+}
+
+
+/* =========================================================
+   25. RESPONSIVE - MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .main-content {
+        padding: 15px;
+    }
+
+    .owner-hero {
+        padding: 22px;
+
+        border-radius: 13px;
+    }
+
+    .owner-welcome-title {
+        font-size: 23px;
+    }
+
+    .owner-welcome-text {
+        font-size: 12px;
+    }
+
+    .owner-hero-actions {
+        width: 100%;
+
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .owner-action-primary,
+    .owner-action-secondary {
+        width: 100%;
+    }
+
+    .owner-hero-summary {
+        flex-direction: column;
+    }
+
+    .owner-summary-card {
+        width: 100%;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .owner-product-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    /* Clickable statistics card */
+
+.owner-stat-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.owner-stat-link .stat-card {
+    height: 100%;
+}
+
+.owner-stat-link:hover {
+    text-decoration: none;
+    color: inherit;
+}
+/* =========================================================
+   OWNER PRODUCT CARD - FINAL DESIGN
+========================================================= */
+
+.product-no-image {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    background: #f8fafc;
+    color: #94a3b8;
+
+    font-size: 12px;
+}
+
+.product-no-image i {
+    font-size: 30px;
+}
+
+
+/* AVAILABILITY */
+
+.product-availability {
+    position: absolute;
+
+    top: 11px;
+    right: 11px;
+
+    display: inline-flex;
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 6px 9px;
+
+    border-radius: 20px;
+
+    font-size: 9px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    box-shadow: 0 3px 10px rgba(15, 23, 42, .12);
+}
+
+.product-availability.available {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.product-availability.rented {
+    background: #ede9fe;
+    color: #6d28d9;
+}
+
+
+/* STATUS ROW */
+
+.product-status-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-bottom: 9px;
+}
+
+.approval-status {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 4px 8px;
+
+    border-radius: 20px;
+
+    font-size: 9px;
+    font-weight: 700;
+
+    text-transform: capitalize;
+}
+
+.approval-status i {
+    font-size: 5px;
+}
+
+.approval-status.approved {
+    background: #ecfdf5;
+    color: #059669;
+}
+
+.approval-status.pending {
+    background: #fff7ed;
+    color: #ea580c;
+}
+
+.approval-status.rejected {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+.product-id {
+    color: #94a3b8;
+
+    font-size: 9px;
+    font-weight: 600;
+}
+
+
+/* PRODUCT NAME */
+
+.owner-product-name {
+    margin: 0 0 7px !important;
+
+    color: #0f172a;
+
+    font-size: 14px !important;
+    font-weight: 700 !important;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* LOCATION */
+
+.product-location {
+    display: flex;
+    align-items: center;
+
+    gap: 4px;
+
+    margin: 0 0 14px !important;
+
+    color: #64748b !important;
+
+    font-size: 10px !important;
+}
+
+
+/* PRICE */
+
+.product-price-row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 12px 0;
+
+    border-top: 1px solid #f1f5f9;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.price-label {
+    display: block;
+
+    margin-bottom: 3px;
+
+    color: #94a3b8;
+
+    font-size: 9px;
+}
+
+.product-price {
+    margin: 0 !important;
+
+    color: #0f172a !important;
+
+    font-size: 17px !important;
+    font-weight: 700 !important;
+}
+
+.product-price span {
+    color: #64748b;
+
+    font-size: 9px;
+    font-weight: 500;
+}
+
+
+/* DEPOSIT */
+
+.deposit-info {
+    text-align: right;
+}
+
+.deposit-info span {
+    display: block;
+
+    margin-bottom: 3px;
+
+    color: #94a3b8;
+
+    font-size: 9px;
+}
+
+.deposit-info strong {
+    color: #334155;
+
+    font-size: 11px;
+}
+
+
+/* ACTIONS */
+
+.owner-product-actions {
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    margin-top: 13px;
+}
+
+.product-action-btn {
+    min-height: 34px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 5px;
+
+    padding: 0 11px;
+
+    border-radius: 7px;
+
+    text-decoration: none;
+
+    font-size: 10px;
+    font-weight: 600;
+
+    transition: .2s ease;
+}
+
+
+/* VIEW */
+
+.product-action-btn.view {
+    flex: 1;
+
+    background: #2563eb;
+    color: #ffffff;
+}
+
+.product-action-btn.view:hover {
+    background: #1d4ed8;
+    color: #ffffff;
+}
+
+
+/* EDIT */
+
+.product-action-btn.edit {
+    flex: 1;
+
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+.product-action-btn.edit:hover {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+
+/* DELETE */
+
+.product-action-btn.delete {
+    width: 34px;
+
+    padding: 0;
+
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+.product-action-btn.delete:hover {
+    background: #dc2626;
+    color: #ffffff;
+}
+
+
+/* EMPTY PRODUCTS */
+
+.owner-products-empty {
+    grid-column: 1 / -1;
+
+    min-height: 280px;
+
+    padding: 45px 25px;
+
+    background: #ffffff;
+
+    border: 1px dashed #cbd5e1;
+    border-radius: 14px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+}
+
+.empty-product-icon {
+    width: 55px;
+    height: 55px;
+
+    margin-bottom: 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 14px;
+
+    background: #eff6ff;
+    color: #2563eb;
+
+    font-size: 23px;
+}
+
+.owner-products-empty h3 {
+    margin: 0 0 7px;
+
+    color: #0f172a;
+
+    font-size: 16px;
+}
+
+.owner-products-empty p {
+    max-width: 400px;
+
+    margin: 0 0 17px;
+
+    color: #64748b;
+
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+
+/* PRODUCT ERROR */
+
+.owner-product-error {
+    grid-column: 1 / -1;
+
+    display: flex;
+    align-items: flex-start;
+
+    gap: 12px;
+
+    padding: 16px;
+
+    background: #fef2f2;
+
+    border: 1px solid #fecaca;
+    border-radius: 10px;
+
+    color: #b91c1c;
+}
+
+.owner-product-error > i {
+    font-size: 19px;
+}
+
+.owner-product-error strong {
+    font-size: 12px;
+}
+
+.owner-product-error p {
+    margin: 4px 0 0;
+
+    font-size: 10px;
+}
+/* =========================================================
+   OWNER BOOKINGS
+========================================================= */
+
+.btn-view-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 9px 13px;
+
+    background: #eff6ff;
+    color: #2563eb;
+
+    border-radius: 8px;
+
+    text-decoration: none;
+
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.btn-view-all:hover {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+
+.owner-booking-list {
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+
+    margin-bottom: 35px;
+}
+
+
+.owner-booking-card {
+    display: grid;
+
+    grid-template-columns:
+        minmax(260px, 1.8fr)
+        minmax(130px, .9fr)
+        minmax(120px, .8fr)
+        minmax(130px, .9fr)
+        70px;
+
+    align-items: center;
+
+    gap: 18px;
+
+    padding: 15px 17px;
+
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+
+    box-shadow:
+        0 3px 10px
+        rgba(15,23,42,.04);
+
+    transition: .2s ease;
+}
+
+
+.owner-booking-card:hover {
+    border-color: #dbeafe;
+
+    box-shadow:
+        0 7px 18px
+        rgba(15,23,42,.07);
+}
+
+
+/* PRODUCT */
+
+.booking-product {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    min-width: 0;
+}
+
+
+.booking-product-image {
+    width: 55px;
+    height: 55px;
+
+    min-width: 55px;
+
+    border-radius: 9px;
+
+    overflow: hidden;
+
+    background: #f8fafc;
+}
+
+
+.booking-product-image img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+}
+
+
+.booking-no-image {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #94a3b8;
+
+    font-size: 19px;
+}
+
+
+.booking-product-info {
+    min-width: 0;
+}
+
+
+.booking-number {
+    display: block;
+
+    margin-bottom: 3px;
+
+    color: #94a3b8;
+
+    font-size: 9px;
+    font-weight: 600;
+}
+
+
+.booking-product-info h4 {
+    margin: 0 0 5px;
+
+    color: #0f172a;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+.booking-customer {
+    display: flex;
+    align-items: center;
+
+    gap: 4px;
+
+    color: #475569;
+
+    font-size: 10px;
+    font-weight: 600;
+}
+
+
+.booking-product-info small {
+    display: block;
+
+    margin-top: 2px;
+
+    color: #94a3b8;
+
+    font-size: 9px;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* COLUMNS */
+
+.booking-column {
+    display: flex;
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+
+.booking-label {
+    margin-bottom: 3px;
+
+    color: #94a3b8;
+
+    font-size: 9px;
+    font-weight: 500;
+}
+
+
+.booking-column strong {
+    color: #334155;
+
+    font-size: 11px;
+    font-weight: 600;
+}
+
+
+.booking-column small {
+    color: #64748b;
+
+    font-size: 9px;
+}
+
+
+.booking-amount {
+    color: #0f172a !important;
+
+    font-size: 13px !important;
+}
+
+
+/* PAYMENT */
+
+.booking-payment {
+    width: fit-content;
+
+    margin-top: 3px;
+
+    padding: 3px 7px;
+
+    border-radius: 20px;
+
+    font-size: 8px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+}
+
+
+.booking-payment.paid {
+    background: #ecfdf5;
+    color: #059669;
+}
+
+
+.booking-payment.pending {
+    background: #fff7ed;
+    color: #ea580c;
+}
+
+
+.booking-payment.failed {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+
+/* RENTAL STATUS */
+
+.booking-status {
+    width: fit-content;
+
+    padding: 5px 8px;
+
+    border-radius: 20px;
+
+    background: #eff6ff;
+    color: #2563eb;
+
+    font-size: 8px;
+    font-weight: 700;
+
+    text-transform: capitalize;
+}
+
+
+.booking-status.completed,
+.booking-status.return-verified {
+    background: #ecfdf5;
+    color: #059669;
+}
+
+
+.booking-status.cancelled {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+
+.booking-status.return-requested {
+    background: #fff7ed;
+    color: #ea580c;
+}
+
+
+/* VIEW */
+
+.booking-action {
+    display: flex;
+    justify-content: flex-end;
+}
+
+
+.booking-view-btn {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 4px;
+
+    padding: 7px 9px;
+
+    background: #eff6ff;
+    color: #2563eb;
+
+    border-radius: 7px;
+
+    text-decoration: none;
+
+    font-size: 9px;
+    font-weight: 600;
+}
+
+
+.booking-view-btn:hover {
+    background: #2563eb;
+    color: #ffffff;
+}
+
+
+/* EMPTY */
+
+.owner-booking-empty {
+    min-height: 180px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    padding: 30px;
+
+    background: #ffffff;
+
+    border: 1px dashed #cbd5e1;
+    border-radius: 12px;
+
+    text-align: center;
+}
+
+
+.booking-empty-icon {
+    width: 46px;
+    height: 46px;
+
+    margin-bottom: 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #eff6ff;
+    color: #2563eb;
+
+    border-radius: 12px;
+
+    font-size: 19px;
+}
+
+
+.owner-booking-empty h3 {
+    margin: 0 0 5px;
+
+    font-size: 14px;
+}
+
+
+.owner-booking-empty p {
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 10px;
+}
+
+
+/* ERROR */
+
+.owner-booking-error {
+    display: flex;
+
+    gap: 10px;
+
+    padding: 14px;
+
+    background: #fef2f2;
+
+    border: 1px solid #fecaca;
+    border-radius: 10px;
+
+    color: #b91c1c;
+
+    font-size: 11px;
+}
+
+
+.owner-booking-error p {
+    margin: 3px 0 0;
+
+    font-size: 9px;
+}
+
+
+/* RESPONSIVE */
+
+@media(max-width:1100px) {
+
+    .owner-booking-card {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .booking-action {
+        justify-content: flex-start;
+    }
+}
+
+
+@media(max-width:650px) {
+
+    .owner-booking-card {
+        grid-template-columns: 1fr;
+    }
+}
+}

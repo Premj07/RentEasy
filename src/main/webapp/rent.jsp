@@ -3,7 +3,7 @@
 
 <%
 if(session.getAttribute("user")==null){
-    response.sendRedirect("login.jsp");
+    response.sendRedirect("index.jsp");
     return;
 }
 
@@ -41,9 +41,34 @@ if(!"approved".equals(status)){
 
 <h3>Proceed to Payment</h3>
 
-<a href="payment.jsp" class="btn btn-primary">
-    Continue Payment
-</a>
+<form action="payment.jsp" method="post">
+
+    <input type="hidden"
+           name="id"
+           value="<%=request.getParameter("id")%>">
+
+    <div class="mb-3">
+        <label>Start Date</label>
+        <input type="date"
+               name="startDate"
+               class="form-control"
+               required>
+    </div>
+
+    <div class="mb-3">
+        <label>End Date</label>
+        <input type="date"
+               name="endDate"
+               class="form-control"
+               required>
+    </div>
+
+    <button type="submit"
+            class="btn btn-primary">
+        Continue Payment
+    </button>
+
+</form>
 
 </body>
-</html>	
+</html>
