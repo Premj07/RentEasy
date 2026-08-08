@@ -109,7 +109,7 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 
 <script async
-src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCvoe_2z74NwxiJuh-TVt76f7j_a52Zuqc&libraries=places&callback=initLocationMap">
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDzKVEoUwy3YJ3CfIdE0V0qFm4hY6HeZeE&libraries=places&callback=initLocationMap">
 </script>
 </head>
 
