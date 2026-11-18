@@ -393,11 +393,14 @@ Pincode
 </label>
 
 <input
-type="text"
-name="pincode"
-class="form-control"
-value="<%=pincode%>"
-required>
+    type="text"
+    id="pincode"
+    name="pincode"
+    class="form-control"
+    value="<%=pincode%>"
+    placeholder="Pincode"
+    maxlength="10"
+    required>
 
 </div>
 
@@ -477,6 +480,18 @@ placeholder="🔍 Search Product Location">
 
 </div>
 
+<div class="mb-3">
+    <button
+        type="button"
+        class="btn btn-success"
+        onclick="useCurrentLocation()">
+
+        <i class="fa-solid fa-location-crosshairs"></i>
+        Use My Current Location
+
+    </button>
+</div>
+
 <div
 id="googleMap"
 style="height:500px;width:100%;">
@@ -487,13 +502,26 @@ style="height:500px;width:100%;">
 <div class="modal-footer">
 
 <button
-type="button"
-class="btn btn-secondary"
-data-bs-dismiss="modal">
+    type="button"
+    class="btn btn-secondary"
+    data-bs-dismiss="modal">
 
-Close
+    Close
 
 </button>
+
+<button
+    type="button"
+    class="btn btn-success"
+    onclick="confirmLocation()">
+
+    <i class="fa-solid fa-check"></i>
+    Use This Location
+
+</button>
+
+</div>
+
 
 </div>
 
@@ -712,26 +740,142 @@ if (navigator.geolocation && !window.locationInitialized) {
 
 // Close initLocationMap()
 }
+function useCurrentLocation() {
+
+    if (!navigator.geolocation) {
+
+        alert("Your browser does not support location detection.");
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+
+        function(position) {
+
+            const currentLocation = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            };
+
+            map.setCenter(currentLocation);
+            map.setZoom(17);
+
+            marker.setPosition(currentLocation);
+
+            updateLocation(currentLocation);
+
+        },
+
+        function(error) {
+
+            if (error.code === 1) {
+
+                alert(
+                    "Location permission denied. " +
+                    "Please allow location access in your browser."
+                );
+
+            } else if (error.code === 2) {
+
+                alert("Your current location is unavailable.");
+
+            } else if (error.code === 3) {
+
+                alert("Location request timed out.");
+
+            } else {
+
+                alert("Unable to detect your current location.");
+
+            }
+
+        },
+
+        {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0
+        }
+    );
+}
 
 function updateLocation(latLng) {
 
-    document.getElementById("latitude").value = latLng.lat();
-    document.getElementById("longitude").value = latLng.lng();
+    // Save latitude
+    document.getElementById("latitude").value =
+        latLng.lat();
 
-    geocoder.geocode({
-        location: latLng
-    }, function(results, status) {
+    // Save longitude
+    document.getElementById("longitude").value =
+        latLng.lng();
 
-        if (status === "OK" && results[0]) {
+    // Reverse geocode
+    geocoder.geocode(
+        {
+            location: latLng
+        },
+        function(results, status) {
 
-            document.getElementById("location").value =
-                results[0].formatted_address;
+            if (status === "OK" && results[0]) {
+
+                const result = results[0];
+
+                // Fill Location
+                document.getElementById("location").value =
+                    result.formatted_address;
+
+                // Find Pincode
+                let pincode = "";
+
+                for (
+                    let i = 0;
+                    i < result.address_components.length;
+                    i++
+                ) {
+
+                    const component =
+                        result.address_components[i];
+
+                    if (
+                        component.types.includes("postal_code")
+                    ) {
+
+                        pincode = component.long_name;
+                        break;
+                    }
+                }
+
+                // Fill Pincode
+                const pincodeField =
+                    document.getElementById("pincode");
+
+                if (pincodeField) {
+                    pincodeField.value = pincode;
+                }
+
+                console.log("Location:", result.formatted_address);
+                console.log("Pincode:", pincode);
+                console.log("Latitude:", latLng.lat());
+                console.log("Longitude:", latLng.lng());
+
+            } else {
+
+                console.log(
+                    "Geocoder failed:",
+                    status
+                );
+
+            }
 
         }
-
-    });
-
+    );
 }
+map.setCenter(currentLocation);
+map.setZoom(17);
+
+marker.setPosition(currentLocation);
+
+updateLocation(currentLocation);
 const locationModal = document.getElementById("locationModal");
 
 locationModal.addEventListener("shown.bs.modal", function () {
@@ -845,7 +989,165 @@ textarea.form-control{
 }
 
 </style>
+<script>
 
+function confirmLocation() {
+
+    const latitude =
+        document.getElementById("latitude").value;
+
+    const longitude =
+        document.getElementById("longitude").value;
+
+
+    // We need coordinates first
+    if (!latitude || !longitude) {
+
+        alert("Please select a location first.");
+
+        return;
+    }
+
+
+    // If location is already available,
+    // directly close the modal
+    const existingLocation =
+        document.getElementById("location").value;
+
+    if (existingLocation) {
+
+        closeLocationModal();
+
+        return;
+    }
+
+
+    // Address is not available yet.
+    // Do reverse geocoding NOW.
+
+    const latLng = new google.maps.LatLng(
+        parseFloat(latitude),
+        parseFloat(longitude)
+    );
+
+
+    geocoder.geocode(
+        {
+            location: latLng
+        },
+        function(results, status) {
+
+            if (status === "OK" && results[0]) {
+
+                const result = results[0];
+
+
+                // -----------------------------
+                // LOCATION
+                // -----------------------------
+
+                document.getElementById("location").value =
+                    result.formatted_address;
+
+
+                // -----------------------------
+                // PINCODE
+                // -----------------------------
+
+                let pincode = "";
+
+                for (
+                    let i = 0;
+                    i < result.address_components.length;
+                    i++
+                ) {
+
+                    const component =
+                        result.address_components[i];
+
+                    if (
+                        component.types.includes("postal_code")
+                    ) {
+
+                        pincode =
+                            component.long_name;
+
+                        break;
+                    }
+                }
+
+
+                const pincodeField =
+                    document.getElementById("pincode");
+
+                if (pincodeField) {
+
+                    pincodeField.value =
+                        pincode;
+                }
+
+
+                console.log(
+                    "Confirmed Location:",
+                    result.formatted_address
+                );
+
+                console.log(
+                    "Confirmed Pincode:",
+                    pincode
+                );
+
+                console.log(
+                    "Confirmed Latitude:",
+                    latitude
+                );
+
+                console.log(
+                    "Confirmed Longitude:",
+                    longitude
+                );
+
+
+                // -----------------------------
+                // CLOSE MODAL
+                // -----------------------------
+
+                closeLocationModal();
+
+
+            } else {
+
+                alert(
+                    "Unable to detect the address. " +
+                    "Please try again."
+                );
+
+                console.log(
+                    "Geocoder error:",
+                    status
+                );
+
+            }
+
+        }
+    );
+}
+function closeLocationModal() {
+
+    const modalElement =
+        document.getElementById("locationModal");
+
+    const modal =
+        bootstrap.Modal.getInstance(modalElement);
+
+    if (modal) {
+
+        modal.hide();
+
+    }
+
+}
+</script>
 </body>
 </html>
 

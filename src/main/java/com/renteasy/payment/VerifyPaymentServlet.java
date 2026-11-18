@@ -46,29 +46,39 @@ public class VerifyPaymentServlet extends HttpServlet {
             attributes.put("razorpay_payment_id", paymentId);
             attributes.put("razorpay_signature", signature);
 
-            String secret = "6IyH9aojY21uwZhSl2uw2WdB";
+            String secret = "p044eaISi4SAou1XqKrgQl6F";
 
             boolean paymentVerified =
                     Utils.verifyPaymentSignature(attributes, secret);
 
             if (!paymentVerified) {
-
                 response.sendRedirect("payment-failed.jsp");
                 return;
             }
 
+            // Get existing session
             HttpSession session = request.getSession(false);
-            
+
+            if (session == null) {
+                System.out.println("ERROR: Session is NULL");
+                response.sendRedirect("index.jsp");
+                return;
+            }
+
+            // Debug session values
+            System.out.println("=================================");
+            System.out.println("RAZORPAY PAYMENT VERIFIED");
             System.out.println("SESSION ID = " + session.getId());
             System.out.println("userId = " + session.getAttribute("userId"));
             System.out.println("email = " + session.getAttribute("email"));
             System.out.println("firstName = " + session.getAttribute("firstName"));
-            
-            if (session == null) {
-
-                response.sendRedirect("index.jsp");
-                return;
-            }
+            System.out.println("productId = " + session.getAttribute("productId"));
+            System.out.println("ownerId = " + session.getAttribute("ownerId"));
+            System.out.println("rentAmount = " + session.getAttribute("rentAmount"));
+            System.out.println("depositAmount = " + session.getAttribute("depositAmount"));
+            System.out.println("rentalMonths = " + session.getAttribute("rentalMonths"));
+            System.out.println("pickupMethod = " + session.getAttribute("pickupMethod"));
+            System.out.println("=================================");
 
             Integer userId =
                     (Integer) session.getAttribute("userId");
@@ -391,56 +401,31 @@ EmailUtility.sendOwnerBookingNotification(
      userPhone,
      productName,
      pickupOtp
-);       // ==========================================================
+);      
 //STEP 6 : COMMIT & REDIRECT
-//==========================================================
+//===============================================
 
 con.commit();
 
 response.sendRedirect("BookingSuccessServlet?rentalId=" + rentalId);
 
-}
+} catch (Exception ex) {
 
-catch (Exception e) {
-
- e.printStackTrace();
-
- if (con != null) {
-
-     try {
-
-         con.rollback();
-
-     } catch (Exception ex) {
-
-         ex.printStackTrace();
-
-     }
-
- }
+ ex.printStackTrace();
 
  response.sendRedirect("payment.jsp");
 
-}
-
-finally {
+} finally {
 
  if (con != null) {
-
      try {
-
          con.close();
-
      } catch (Exception e) {
-
          e.printStackTrace();
-
      }
-
  }
-
 }
-
-}
-
+        
+    }
+    
 }

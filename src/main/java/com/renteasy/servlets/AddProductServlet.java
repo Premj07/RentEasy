@@ -156,49 +156,53 @@ public class AddProductServlet extends HttpServlet {
 
                 if(imagePath.equals("")){
 
-                    ps = con.prepareStatement(
+                	ps = con.prepareStatement(
+                		    "UPDATE products SET " +
+                		            "name=?," +
+                		            "price=?," +
+                		            "deposit=?," +
+                		            "description=?," +
+                		            "location=?," +
+                		            "latitude=?," +
+                		            "longitude=?," +
+                		            "category=? " +
+                		            "WHERE id=?");
 
-                            "UPDATE products SET " +
-                                    "name=?," +
-                                    "price=?," +
-                                    "deposit=?," +
-                                    "description=?," +
-                                    "location=?," +
-                                    "category=? " +
-                                    "WHERE id=?");
-
-                    ps.setString(1,name);
-                    ps.setInt(2,price);
-                    ps.setInt(3,deposit);
-                    ps.setString(4,description);
-                    ps.setString(5,location);
-                    ps.setString(6,category);
-                    ps.setInt(7,
-                            Integer.parseInt(id));
+                	ps.setString(1, name);
+                	ps.setInt(2, price);
+                	ps.setInt(3, deposit);
+                	ps.setString(4, description);
+                	ps.setString(5, location);
+                	ps.setString(6, latitude);
+                	ps.setString(7, longitude);
+                	ps.setString(8, category);
+                	ps.setInt(9, Integer.parseInt(id));
 
                 }else{
 
-                    ps = con.prepareStatement(
+                	ps = con.prepareStatement(
+                		    "UPDATE products SET " +
+                		            "name=?," +
+                		            "price=?," +
+                		            "deposit=?," +
+                		            "image=?," +
+                		            "description=?," +
+                		            "location=?," +
+                		            "latitude=?," +
+                		            "longitude=?," +
+                		            "category=? " +
+                		            "WHERE id=?");
 
-                            "UPDATE products SET " +
-                                    "name=?," +
-                                    "price=?," +
-                                    "deposit=?," +
-                                    "image=?," +
-                                    "description=?," +
-                                    "location=?," +
-                                    "category=? " +
-                                    "WHERE id=?");
-
-                    ps.setString(1,name);
-                    ps.setInt(2,price);
-                    ps.setInt(3,deposit);
-                    ps.setString(4,imagePath);
-                    ps.setString(5,description);
-                    ps.setString(6,location);
-                    ps.setString(7,category);
-                    ps.setInt(8,
-                            Integer.parseInt(id));
+                	ps.setString(1, name);
+                	ps.setInt(2, price);
+                	ps.setInt(3, deposit);
+                	ps.setString(4, imagePath);
+                	ps.setString(5, description);
+                	ps.setString(6, location);
+                	ps.setString(7, latitude);
+                	ps.setString(8, longitude);
+                	ps.setString(9, category);
+                	ps.setInt(10, Integer.parseInt(id));
                 }
 
                 ps.executeUpdate();

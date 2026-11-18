@@ -63,11 +63,19 @@ public class CreateOrderServlet extends HttpServlet {
         	session.setAttribute("pickupMethod", pickupMethod);
         	session.setAttribute("rentalMonths", rentalMonths);
         	
-            double totalAmount =
-                    Double.parseDouble(request.getParameter("amount"));
+        	String amountParam = request.getParameter("amount");
 
-            // Razorpay amount is in paise
-            int amountInPaise = (int) (totalAmount * 100);
+        	System.out.println("=================================");
+        	System.out.println("RAZORPAY DEBUG");
+        	System.out.println("Received amount = " + amountParam);
+
+        	double totalAmount = Double.parseDouble(amountParam);
+
+        	int amountInPaise = (int) Math.round(totalAmount * 100);
+
+        	System.out.println("Total amount in rupees = ₹" + totalAmount);
+        	System.out.println("Amount sent to Razorpay = " + amountInPaise + " paise");
+        	System.out.println("=================================");
 
             // ======================================================
             // Create Razorpay Client
@@ -107,8 +115,12 @@ public class CreateOrderServlet extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 
             response.getWriter().print(
-                    "{\"error\":\"Unable to create Razorpay Order\"}");
-
+                "{\"error\":\"Unable to create Razorpay Order\", " +
+                "\"details\":\"" +
+                e.getClass().getName() + ": " +
+                e.getMessage() +
+                "\"}"
+            );
         }
 
     }

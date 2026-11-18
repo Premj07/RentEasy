@@ -5,9 +5,10 @@ import com.razorpay.RazorpayClient;
 public class RazorpayConfig {
 
     public static RazorpayClient getClient() throws Exception {
-        return new RazorpayClient(
-                "rzp_test_THRfTDCoXenpH0",
-                "6IyH9aojY21uwZhSl2uw2WdB"
-        );
+
+        String keyId = "rzp_test_TOwLzxc7cyP6bU";
+        String keySecret = "p044eaISi4SAou1XqKrgQl6F";
+
+        return new RazorpayClient(keyId, keySecret);
     }
 }

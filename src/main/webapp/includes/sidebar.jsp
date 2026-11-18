@@ -1,86 +1,261 @@
-<div id="sidebar" class="sidebar">
+<%@ page session="true" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
-<div class="sidebar-header">
+<%
+/* =========================================================
+   RentEasy - Reusable User Sidebar
+   ========================================================= */
 
-<img src="images/logo.png.jpeg" class="sidebar-logo">
+String sidebarFirstName =
+        (String) session.getAttribute("firstName");
 
-<h3>RentEasy</h3>
+String sidebarLastName =
+        (String) session.getAttribute("lastName");
 
-</div>
+if (sidebarFirstName == null) sidebarFirstName = "";
+if (sidebarLastName == null) sidebarLastName = "";
+
+String sidebarFullName =
+        (sidebarFirstName + " " + sidebarLastName).trim();
+
+if (sidebarFullName.isEmpty()) {
+    sidebarFullName = "User";
+}
+
+String sidebarFirstLetter =
+        sidebarFullName.substring(0, 1).toUpperCase();
+%>
 
 
-<ul>
+<!-- ================= RENTEASY SIDEBAR ================= -->
 
-<li>
-<a href="dashboard.jsp">
-<i class="bi bi-speedometer2"></i> Dashboard
-</a>
-</li>
+<aside class="re-sidebar" id="sidebar">
 
-<li>
-<a href="products.jsp">
-<i class="bi bi-grid"></i> Browse Products
-</a>
-</li>
+    <!-- USER PROFILE -->
+    <div class="re-sidebar-header">
 
-<li>
-<a href="WishlistPageServlet">
-    <i class="bi bi-heart"></i>
-    <span>Wishlist</span>
-</a>
-</li>
+        <div class="re-user-profile">
 
-<li>
-<a href="myRentals.jsp">
-<i class="bi bi-box-seam"></i> My Rentals
-</a>
-</li>
+            <div class="re-user-avatar">
+                <%= sidebarFirstLetter %>
+            </div>
 
-<li>
-<a href="paymentHistory.jsp"><i class="bi bi-credit-card"></i> Payments
-</a>
-</li>
+            <div class="re-user-details">
 
-<li>
-<a href="history.jsp">
-<i class="bi bi-clock-history"></i> Rental History
-</a>
-</li>
+                <h4>
+                    <%= sidebarFullName %>
+                </h4>
 
-<li>
-<a href="delivery.jsp">
-<i class="bi bi-truck"></i> Delivery
-</a>
-</li>
+                <small>
+                    Student / User
+                </small>
 
-<li>
-<a href="profile.jsp">
-<i class="bi bi-person"></i> Profile
-</a>
-</li>
+                <div class="re-verified-badge">
+                    <i class="bi bi-patch-check-fill"></i>
+                    Verified User
+                </div>
 
-<li>
-    <a href="kyc.jsp">
-        <i class="bi bi-shield-check"></i> KYC Verification
-    </a>
-</li>
+            </div>
 
-</ul>
+        </div>
 
-<div class="sidebar-bottom">
+    </div>
 
-<a href="ownerDashboard.jsp">
-	
-<i class="bi bi-arrow-repeat"></i> Switch To Owner
 
-</a>
+    <!-- ================= SIDEBAR MENU ================= -->
 
-<a href="logout">
+    <div class="re-sidebar-scroll">
 
-<i class="bi bi-box-arrow-right"></i> Logout
+        <!-- OVERVIEW -->
+        <div class="re-sidebar-section-title">
+            Overview
+        </div>
 
-</a>
+        <ul class="re-sidebar-menu">
 
-</div>
+            <li>
+                <a href="dashboard.jsp"
+                   class="re-sidebar-link active">
 
-</div>
+                    <i class="bi bi-grid-fill"></i>
+
+                    <span>
+                        Dashboard
+                    </span>
+
+                </a>
+            </li>
+
+        </ul>
+
+
+        <!-- RENTING -->
+        <div class="re-sidebar-section-title">
+            Renting
+        </div>
+
+        <ul class="re-sidebar-menu">
+
+            <li>
+                <a href="products.jsp"
+                   class="re-sidebar-link">
+
+                    <i class="bi bi-box-seam"></i>
+
+                    <span>
+                        Browse Products
+                    </span>
+
+                </a>
+            </li>
+
+
+            <li>
+                <a href="WishlistPageServlet"
+                   class="re-sidebar-link">
+
+                    <i class="bi bi-heart"></i>
+
+                    <span>
+                        Wishlist
+                    </span>
+
+                </a>
+            </li>
+
+
+            <li>
+                <a href="myRentals.jsp"
+                   class="re-sidebar-link">
+
+                    <i class="bi bi-bag-check"></i>
+
+                    <span>
+                        My Rentals
+                    </span>
+
+                </a>
+            </li>
+
+
+            <li>
+                <a href="history.jsp"
+                   class="re-sidebar-link">
+
+                    <i class="bi bi-clock-history"></i>
+
+                    <span>
+                        Rental History
+                    </span>
+
+                </a>
+            </li>
+
+        </ul>
+
+
+        <!-- FINANCE -->
+        <div class="re-sidebar-section-title">
+            Finance
+        </div>
+
+        <ul class="re-sidebar-menu">
+
+            <li>
+                <a href="paymentHistory.jsp"
+                   class="re-sidebar-link">
+
+                    <i class="bi bi-credit-card"></i>
+
+                    <span>
+                        Payments
+                    </span>
+
+                </a>
+            </li>
+
+
+            <li>
+                <a href="delivery.jsp"
+                   class="re-sidebar-link">
+
+                    <i class="bi bi-truck"></i>
+
+                    <span>
+                        Delivery
+                    </span>
+
+                </a>
+            </li>
+
+        </ul>
+
+
+        <!-- ACCOUNT -->
+        <div class="re-sidebar-section-title">
+            Account
+        </div>
+
+        <ul class="re-sidebar-menu">
+
+            <li>
+                <a href="profile.jsp"
+                   class="re-sidebar-link">
+
+                    <i class="bi bi-person"></i>
+
+                    <span>
+                        Profile
+                    </span>
+
+                </a>
+            </li>
+
+
+            <li>
+                <a href="kyc.jsp"
+                   class="re-sidebar-link">
+
+                    <i class="bi bi-shield-check"></i>
+
+                    <span>
+                        KYC Verification
+                    </span>
+
+                </a>
+            </li>
+
+        </ul>
+
+    </div>
+
+
+    <!-- ================= BOTTOM ================= -->
+
+    <div class="re-sidebar-bottom">
+
+        <a href="ownerDashboard.jsp"
+           class="re-sidebar-bottom-link">
+
+            <i class="bi bi-arrow-left-right"></i>
+
+            <span>
+                Switch to Owner
+            </span>
+
+        </a>
+
+
+        <a href="logout"
+           class="re-sidebar-bottom-link re-logout">
+
+            <i class="bi bi-box-arrow-right"></i>
+
+            <span>
+                Logout
+            </span>
+
+        </a>
+
+    </div>
+
+</aside>

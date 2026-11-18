@@ -366,7 +366,6 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
 <body>
 
 <jsp:include page="includes/navbar.jsp"/>
-<jsp:include page="includes/sidebar.jsp"/>
 
 
 <div class="main-content">

@@ -244,11 +244,17 @@ function selectPickup(type, element) {
 
 async function startPayment() {
 
-    let amount =
-        document.getElementById("grandValue").innerText
-                .replace("₹","")
-                .replace(",","")
-                .trim();
+    // Get the actual calculated total from hidden field
+    let amount = parseFloat(
+        document.getElementById("grandTotal").value
+    );
+
+    if (isNaN(amount) || amount <= 0) {
+        alert("Invalid payment amount.");
+        return;
+    }
+
+    console.log("RentEasy Payment Amount:", amount);
 
     try {
 
@@ -297,7 +303,7 @@ function openRazorpay(order){
     var options = {
 
         key:
-        "rzp_test_THRfTDCoXenpH0",
+        "rzp_test_TOwLzxc7cyP6bU",
 
         amount:
         order.amount,
